@@ -2,6 +2,7 @@ import type { NextPage, GetServerSideProps } from "next";
 import { useState, useEffect } from 'react';
 import { getWorkouts, createWorkout, deleteWorkout } from "../../requests";
 import Head from "next/head";
+import NewWorkoutForm from '../../components/workouts/NewWorkoutForm';
 import NavigationBar from "../../components/navigation-bar";
 
 const Workouts: NextPage = () => {
@@ -58,6 +59,7 @@ const Workouts: NextPage = () => {
             </li>
           ))}
         </ul>
+        <NewWorkoutForm setWorkouts={setWorkouts} />
         <form className="flex flex-col w-1/3">
           <input className="border-2" type="text" />
           <select className="border-2">
