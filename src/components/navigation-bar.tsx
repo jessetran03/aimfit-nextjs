@@ -8,6 +8,12 @@ const NavigationBar = () => {
         <a>AimFit</a>
       </Link>
       <div className="space-x-5">
+        <Link href="/register">
+          <a>Sign Up</a>
+        </Link>
+        <Link href="/login">
+          <a>Login</a>
+        </Link>
         <Link href="/workouts">
           <a>Workouts</a>
         </Link>

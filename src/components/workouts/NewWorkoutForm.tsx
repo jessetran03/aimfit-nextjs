@@ -1,10 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, FC } from "react";
 import { createWorkout } from "../../requests";
 
-const NewWorkoutForm = (setWorkouts: any) => {
+interface IProps {
+  renderWorkouts: () => void;
+}
+
+const NewWorkoutForm: FC<IProps> = ({ renderWorkouts }) => {
   interface Workout {
     id: number;
-    user_id: number;
+    userId: number;
     day: string;
     title: string;
   }
@@ -22,16 +26,31 @@ const NewWorkoutForm = (setWorkouts: any) => {
   const [day, setDay] = useState<string>("Sunday");
   const [title, setTitle] = useState<string>("New Workout");
 
-  const newWorkout = (input: any) => {
-    createWorkout(input);
+  const newWorkout = () => {
+    // Function does not accept single quotes
+    const input = {
+      userId: 1,
+      day,
+      title,
+    };
+    createWorkout(input).then((workout) => renderWorkouts());
   };
 
   return (
-    <form className="flex flex-col w-1/3" onSubmit={(e) => e.preventDefault}>
-      <input className="border-2" type="text" />
+    <form
+      className="flex flex-col w-1/3 mt-2"
+      onSubmit={(e) => e.preventDefault}
+    >
+      <input
+        className="border-2"
+        type="text"
+        placeholder="Workout Name"
+        onChange={(e) => setTitle(e.target.value)}
+      />
       <select
         className="border-2"
-        onSelect={(e) => setDay((e.target as HTMLOptionElement).value)}
+        value={day}
+        onChange={(e) => setDay(e.target.value)}
       >
         {days.map((day, index) => (
           <option key={index} value={day}>
@@ -43,19 +62,11 @@ const NewWorkoutForm = (setWorkouts: any) => {
         className="border-2"
         onClick={(e) => {
           e.preventDefault();
-          newWorkout({ user_id: 1, day: "Tuesday", title: "test-next" });
+          newWorkout();
         }}
         type="submit"
       >
         Create new workout
-      </button>
-      <button
-        onClick={(e) => {
-          e.preventDefault;
-          console.log({ day, title });
-        }}
-      >
-        Click for state
       </button>
     </form>
   );

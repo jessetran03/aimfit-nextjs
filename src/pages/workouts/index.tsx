@@ -1,41 +1,35 @@
 import type { NextPage, GetServerSideProps } from "next";
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { getWorkouts, createWorkout, deleteWorkout } from "../../requests";
 import Head from "next/head";
-import NewWorkoutForm from '../../components/workouts/NewWorkoutForm';
-import NavigationBar from "../../components/navigation-bar";
+import NewWorkoutForm from "../../components/workouts/NewWorkoutForm";
 
 const Workouts: NextPage = () => {
-
   interface Workout {
     id: number;
-    user_id: number;
+    userId: number;
     day: string;
     title: string;
   }
-  
-  const days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
+
   const deleteButton = (id: number) => {
-    deleteWorkout(id);
-  }
+    deleteWorkout(id)
+      .then(() => renderWorkouts())
+  };
   const newWorkout = (input: any) => {
     createWorkout(input);
-  }
+  };
 
   const [workouts, setWorkouts] = useState<Array<Workout>>([]);
 
-  useEffect(() => {
+  const renderWorkouts = () => {
     getWorkouts()
-      .then((workouts) => setWorkouts(workouts))
-  }, [workouts])
+      .then((workouts) => setWorkouts(workouts));
+  };
+
+  useEffect(() => {
+    renderWorkouts();
+  }, []);
 
   return (
     <>
@@ -43,15 +37,16 @@ const Workouts: NextPage = () => {
         <title>Aim to be fit.</title>
         <meta name="description" content="Aim to be fit" />
       </Head>
-      <main>
+
+      <main className="m-10">
         <div>Workouts</div>
         <ul className="grid gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {workouts.map((workout, index) => (
-            <li key={index} className="border-2 p-2 h-40 rounded-xl">
+            <li key={index} className="h-40 p-2 border-2 rounded-xl">
               <h2 className="text-lg font-semibold">{workout?.title}</h2>
               <p className="text-sm text-gray-600">{workout.day}</p>
               <button
-                className="border-2 p-1"
+                className="p-1 border-2"
                 onClick={() => deleteButton(workout.id)}
               >
                 Delete
@@ -59,8 +54,8 @@ const Workouts: NextPage = () => {
             </li>
           ))}
         </ul>
-        <NewWorkoutForm setWorkouts={setWorkouts} />
-        <form className="flex flex-col w-1/3">
+        <NewWorkoutForm renderWorkouts={renderWorkouts} />
+        {/* <form className="flex flex-col w-1/3">
           <input className="border-2" type="text" />
           <select className="border-2">
             {days.map((day, index) => (
@@ -79,7 +74,7 @@ const Workouts: NextPage = () => {
           >
             Create new workout
           </button>
-        </form>
+        </form> */}
       </main>
     </>
   );

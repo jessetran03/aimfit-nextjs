@@ -16,11 +16,23 @@ async function graphqlRequest(query, variables = {}) {
   return responseBody.data;
 }
 
+export async function createUser(input) {
+  const mutation = `
+  mutation CreateUser($input: CreateUserInput) {
+    user: newUser(input: $input) {
+      id
+      username
+    }
+  }`;
+  const { user } = await graphqlRequest(mutation, { input });
+  return user;
+}
+
 export async function getExercises() {
   const query = `query {
     exercises {
       id
-      exercise_name
+      name
       muscle
     }
   }`;
@@ -32,7 +44,7 @@ export async function getExerciseById(id) {
   const query = `query {
     exercise (id: ${id}) {
       id
-      exercise_name
+      name
       muscle
     }
   }`;
@@ -55,10 +67,10 @@ export async function getWorkouts() {
 export async function createWorkout(input) {
   const mutation = `
     mutation CreateWorkout($input: CreateWorkoutInput) {
-    workout: newWorkout(input: $input) {
-      id
-    }
-  }`;
+      workout: newWorkout(input: $input) {
+        id
+      }
+    }`;
   const { workout } = await graphqlRequest(mutation, { input });
   return workout;
 }
