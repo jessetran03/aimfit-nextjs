@@ -29,7 +29,6 @@ const NewWorkoutForm: FC<IProps> = ({ renderWorkouts }) => {
   const newWorkout = () => {
     // Function does not accept single quotes
     const input = {
-      userId: 1,
       day,
       title,
     };

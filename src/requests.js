@@ -1,17 +1,24 @@
+import TokenService from './services/token-service';
 const endpointURL = "http://localhost:9000/graphql";
 
 async function graphqlRequest(query, variables = {}) {
-  const response = await fetch(endpointURL, {
+  const request = {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ query, variables }),
-  });
+  };
+  if (TokenService.hasAuthToken()) {
+    request.headers['authorization'] = 'Bearer ' + TokenService.getAuthToken();
+  }
+  const response = await fetch(endpointURL, request);
   const responseBody = await response.json();
+  console.log(responseBody)
   if (responseBody.errors) {
     const message = responseBody.errors
       .map((error) => error.message)
       .join("\n");
-    throw new Error(message);
+    // throw new Error(message);
+    console.log(message)
   }
   return responseBody.data;
 }

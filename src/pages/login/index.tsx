@@ -1,26 +1,36 @@
 import type { NextPage } from "next";
 // import { getExercises, getExerciseById } from '../../requests';
+import { useRouter } from "next/router";
+import TokenService from "../../services/token-service";
 import { useState, FC } from "react";
 import Head from "next/head";
 
 const Login: NextPage = () => {
-
   const [username, setUsername] = useState<string>();
   const [password, setPassword] = useState<string>();
 
-  const handleLogin = async () => {
+  const router = useRouter();
+
+  const handleLogin = async (e: any) => {
+    e.preventDefault();
     const login = { username, password };
     return await fetch(`http://localhost:9000/api/auth/login`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'content-type': 'application/json'
+        "content-type": "application/json",
       },
       body: JSON.stringify(login),
     })
-      .then(res => {
-        if (!res.ok)
-          return res.json().then(e => Promise.reject(e))
-        return res.json()
+      .then((res) => {
+        if (!res.ok) return res.json().then((e) => Promise.reject(e));
+        return res.json();
+      })
+      .then((res) => {
+        TokenService.saveAuthToken(res.authToken);
+      })
+      .then((res) => {
+        console.log(history)
+        router.push("/");
       })
   };
 
@@ -51,11 +61,7 @@ const Login: NextPage = () => {
           />
           <button
             className="border-2"
-            onClick={(e) => {
-              e.preventDefault();
-              handleLogin()
-                .then(res => console.log(res))
-            }}
+            onClick={(e) => handleLogin(e)}
             type="submit"
           >
             Login

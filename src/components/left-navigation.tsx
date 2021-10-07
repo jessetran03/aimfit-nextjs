@@ -2,13 +2,13 @@ import React, { useEffect } from "react";
 import Link from "next/link";
 import TokenService from "../services/token-service";
 
-const NavigationBar = () => {
+const LeftNavigation = () => {
   return (
-    <nav className="flex flex-row justify-between w-screen p-5 bg-gray-100 z-15">
+    <nav className="fixed z-20 w-48 h-full p-5 bg-gray-200">
       <Link href="/">
         <a>AimFit</a>
       </Link>
-      <div className="space-x-5">
+      <div className="flex flex-col">
         {typeof window !== "undefined" && TokenService.hasAuthToken() ? (
           <Link href="/">
             <a onClick={() => TokenService.clearAuthToken()}>Log Out</a>
@@ -16,22 +16,22 @@ const NavigationBar = () => {
         ) : (
           <>
             <Link href="/register">
-              <a>Sign Up</a>
+              <a className="my-px">Sign Up</a>
             </Link>
             <Link href="/login">
-              <a>Login</a>
+              <a className="my-px">Login</a>
             </Link>
           </>
         )}
         <Link href="/workouts">
-          <a>Workouts</a>
+          <a className="my-px">Workouts</a>
         </Link>
         <Link href="/exercises">
-          <a>Exercises</a>
+          <a className="my-px">Exercises</a>
         </Link>
       </div>
     </nav>
   );
 };
 
-export default NavigationBar;
+export default LeftNavigation;

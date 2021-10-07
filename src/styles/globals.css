@@ -15,6 +15,10 @@ a {
   text-decoration: none;
 }
 
+a:hover {
+  color: #17c5f0;
+}
+
 * {
   box-sizing: border-box;
 }
